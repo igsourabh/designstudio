@@ -3,31 +3,30 @@ import { render } from "react-dom";
 import { Stage, Layer, Rect, Line, Image, Circle } from "react-konva";
 import useImage from "use-image";
 import { forwardRef } from "react";
+const grid = 20;
+const gridWidth = 730;
+const linesA = [];
+const linesB = [];
+
+for (let i = 0; i < gridWidth / grid; i++) {
+  linesA.push(
+    <Line
+      strokeWidth={1}
+      stroke={"black"}
+      points={[i * grid, 0, i * grid, gridWidth]}
+    />
+  );
+
+  linesB.push(
+    <Line
+      strokeWidth={1}
+      stroke={"black"}
+      points={[0, i * grid, gridWidth, i * grid]}
+    />
+  );
+}
 
 const App = forwardRef((props, ref) => {
-  const grid = 20;
-  const gridWidth = 730;
-  const linesA = [];
-  const linesB = [];
-
-  for (let i = 0; i < gridWidth / grid; i++) {
-    linesA.push(
-      <Line
-        strokeWidth={props.stroke}
-        stroke={"black"}
-        points={[i * grid, 0, i * grid, gridWidth]}
-      />
-    );
-
-    linesB.push(
-      <Line
-        strokeWidth={props.stroke}
-        stroke={"black"}
-        points={[0, i * grid, gridWidth, i * grid]}
-      />
-    );
-  }
-
   const [data, setdata] = useState([]);
   const [height, setheight] = useState();
   const [width, setwidth] = useState();
@@ -38,7 +37,7 @@ const App = forwardRef((props, ref) => {
   const [dran, setdran] = useState(false);
   const ss = () => {
     return (
-      <Image
+      <Rect
         onDragStart={(e) => {
           console.log("drag start");
           setdran(true);
@@ -62,11 +61,11 @@ const App = forwardRef((props, ref) => {
         }}
         x={x}
         y={y}
-        // rotation={"30"}
-        image={image}
         draggable
-        width={width}
-        height={height}
+        width={600}
+        height={200}
+        fill="red"
+        fillPatternImage={image}
       />
     );
   };
@@ -78,8 +77,8 @@ const App = forwardRef((props, ref) => {
   };
 
   const mouse = (e) => {
-    setx(Math.round(e.screenX / grid) * grid - 300);
-    sety(Math.round(e.screenY / grid) * grid - 70);
+    setx(Math.round(e.clientX / grid) * grid - 500);
+    sety(Math.round(e.clientY / grid) * grid - 40);
   };
   console.log(data);
   console.log({ height });
@@ -93,15 +92,15 @@ const App = forwardRef((props, ref) => {
     },
     {
       image:
-        "https://res.cloudinary.com/sourabhvaish/image/upload/v1653459420/zkoxy53ojvkzx5gfxkbf.jpg",
-      height: 80,
-      width: 80,
+        "https://res.cloudinary.com/sourabhvaish/image/upload/v1653484830/ybatycyvwfpkjtwg4kby.webp",
+      height: 2000,
+      width: 2000,
     },
     {
       image:
-        "https://res.cloudinary.com/sourabhvaish/image/upload/v1655372112/AriesHex_am0ota.webp",
-      height: 82,
-      width: 98,
+        "https://image.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-600w-1725825019.jpg",
+      height: 10,
+      width: 40,
     },
   ];
   return (
@@ -135,10 +134,7 @@ const App = forwardRef((props, ref) => {
           onClick={addshape}
           onMouseMove={mouse}
           ref={ref}
-          style={{
-            display: "inline-block",
-            // backgroundImage: `url("https://res.cloudinary.com/sourabhvaish/image/upload/v1655371991/oie_rPgAcBdRQWrJ_nq2rzd.png")`,
-          }}
+          style={{ display: "inline-block" }}
         >
           <Stage width={730} height={730}>
             <Layer>
